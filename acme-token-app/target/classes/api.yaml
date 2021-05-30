@@ -1,0 +1,161 @@
+package snippet;
+
+public class Snippet {
+	swagger: '2.0'
+	info:
+	  description: API Token Generation API
+	  version: '1.0'
+	  title: ACME Corp - API Token Generation API
+	  contact: {}
+	host: 'localhost:8080'
+	basePath: /api
+	tags:
+	  - name: token-api-controller
+	    description: the token API
+	paths:
+	  /token/generate:
+	    post:
+	      tags:
+	        - token-api-controller
+	      summary: Generates a new API Token
+	      description: This endpoint will generate an API token and persist it
+	      operationId: tokenGeneratePost
+	      consumes:
+	        - application/json
+	      produces:
+	        - application/json
+	      parameters:
+	        - in: body
+	          name: body
+	          description: body
+	          required: true
+	          schema:
+	            $ref: '#/definitions/GenerateApiTokenRequest'
+	      responses:
+	        '200':
+	          description: API token generated
+	          schema:
+	            $ref: '#/definitions/APITokenGenerationResponse'
+	        '201':
+	          description: Created
+	        '400':
+	          description: Invalid request parameters
+	          schema:
+	            $ref: '#/definitions/ApiErrorResponse'
+	        '401':
+	          description: Unauthorized
+	        '403':
+	          description: Invalid JWT Token
+	        '404':
+	          description: Not Found
+	        '500':
+	          description: Failed to generate API token
+	          schema:
+	            $ref: '#/definitions/ApiErrorResponse'
+	  /token/validate:
+	    post:
+	      tags:
+	        - token-api-controller
+	      summary: Validates an API Token
+	      description: API tokens can expire or can be maliciously created. This endpoint helps with validating the real ones.
+	      operationId: tokenValidatePost
+	      consumes:
+	        - application/json
+	      produces:
+	        - application/json
+	      parameters:
+	        - in: body
+	          name: body
+	          description: body
+	          required: true
+	          schema:
+	            $ref: '#/definitions/InlineObject'
+	      responses:
+	        '200':
+	          description: API Token is valid
+	          schema:
+	            $ref: '#/definitions/APIData'
+	        '201':
+	          description: Created
+	        '400':
+	          description: Invalid API token provided
+	          schema:
+	            $ref: '#/definitions/ApiErrorResponse'
+	        '401':
+	          description: API token  Expired
+	          schema:
+	            $ref: '#/definitions/ApiErrorResponse'
+	        '403':
+	          description: Forbidden
+	        '404':
+	          description: API token  Not Found
+	          schema:
+	            $ref: '#/definitions/ApiErrorResponse'
+	        '500':
+	          description: Internal Server Error
+	          schema:
+	            $ref: '#/definitions/ApiErrorResponse'
+	definitions:
+	  APIData:
+	    type: object
+	    required:
+	      - appUrl
+	    properties:
+	      appUrl:
+	        type: string
+	        example: 'https://api.acme-corp.com/1.0'
+	        description: Environment url for this token
+	    title: APIData
+	  APITokenGenerationResponse:
+	    type: object
+	    required:
+	      - apiToken
+	      - validTo
+	    properties:
+	      apiToken:
+	        type: string
+	        example: 4d4f434841
+	        description: The generated API token
+	      id:
+	        type: integer
+	        format: int32
+	      validTo:
+	        type: string
+	        example: '12/12/2018 23:15:10'
+	        description: Timestamp till this API token is valid
+	    title: APITokenGenerationResponse
+	  ApiErrorResponse:
+	    type: object
+	    properties:
+	      errorCode:
+	        type: number
+	        example: -123
+	        description: Error code useful for debugging
+	      errorMessage:
+	        type: string
+	        example: Request failed
+	        description: Error message
+	    title: ApiErrorResponse
+	  GenerateApiTokenRequest:
+	    type: object
+	    required:
+	      - appUrl
+	    properties:
+	      appUrl:
+	        type: string
+	        example: 'https://api.acme-corp.com/1.0'
+	        description: Environment url used by the SDK
+	    title: GenerateApiTokenRequest
+	  InlineObject:
+	    type: object
+	    required:
+	      - apiToken
+	    properties:
+	      apiToken:
+	        type: string
+	        example: d4f434
+	        description: An API token
+	    title: InlineObject
+	
+}
+

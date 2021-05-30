@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: acme-token-app
+Implementation-Version: 1.0
+Built-By: satendra
+Implementation-Vendor-Id: com.acme
+Build-Jdk: 1.8.0_291
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/acme-token-app
+Created-By: Maven Integration for Eclipse
+
